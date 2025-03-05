@@ -46,27 +46,27 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadRecords();
+    //_loadRecords();
   }
 
-  Future<void> _loadRecords() async {
-    final data = await widget.dbHelper.queryAllRows();
-    setState(() {
-      _records = data;
-    });
-  }
+//  Future<void> _loadRecords() async {
+//     final data = await widget.dbHelper.queryAllRows();
+//     setState(() {
+//       _records = data;
+//     });
+//   }
 
-  Future<void> _addRecord() async {
-    if (_nameController.text.isEmpty) return;
-    await widget.dbHelper.insert({'name': _nameController.text});
-    _nameController.clear();
-    _loadRecords();
-  }
+//   Future<void> _addRecord() async {
+//     if (_nameController.text.isEmpty) return;
+//     await widget.dbHelper.insert({'name': _nameController.text});
+//     _nameController.clear();
+//     _loadRecords();
+//   }
 
-  Future<void> _deleteRecord(int id) async {
-    await widget.dbHelper.delete(id);
-    _loadRecords();
-  }
+//   Future<void> _deleteRecord(int id) async {
+//     await widget.dbHelper.delete(id);
+//     _loadRecords();
+//   } 
 
   @override
   Widget build(BuildContext context) {
