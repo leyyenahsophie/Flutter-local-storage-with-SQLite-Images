@@ -23,14 +23,18 @@ class DatabaseHelper {
 
   // Initialize the database
   Future<void> init() async {
+    try {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
     _db = await openDatabase(
       path,
       version: _databaseVersion,
       onCreate: _onCreate,
-    );
+    );   
+  }catch(e){
+    print("Database intialization failed: $e");
   }
+}
 
   // Method to create database schema
   Future _onCreate(Database db, int version) async {
@@ -104,4 +108,18 @@ class DatabaseHelper {
       folderId++;
     }
   }
+
+ // Query all folders
+  Future<List<Map<String, dynamic>>> queryAllFolders() async {
+    return await _db.query(folderTable);
+  }
+
+Future<List<Map<String, dynamic>>> queryCardsByFolder(int folderId) async {
+  return await _db.query(
+    cardTable,
+    where: '$columnFolderId = ?',
+    whereArgs: [folderId],
+  );
+}
+
 }
