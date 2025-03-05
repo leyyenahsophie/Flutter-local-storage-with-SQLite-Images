@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final dbHelper = DatabaseHelper();
-  await dbHelper.init();
-  runApp(MyApp(dbHelper: dbHelper));
+  dbHelper.init().then((_) {
+    runApp(MyApp(dbHelper: dbHelper));
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -31,6 +32,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  //setting colorscheme
+  Color background = Color(0xFF558C8C);
+  Color background2 = Color(0xFFE8DB7D);
+  Color accent1 = Color(0xFF82204A);
+  Color accent2 = Color(0xFF7DDF64);
+  Color text = Color(0xFFEFF7FF);
+  Color text2 = Color(0xFF231123);
+
   List<Map<String, dynamic>> _records = [];
   final TextEditingController _nameController = TextEditingController();
 
@@ -61,36 +70,60 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List folders = ['Heart', 'Spades', 'Diamonds', 'Clubs'];
     return Scaffold(
-      appBar: AppBar(title: const Text('Simple SQL App')),
+      appBar: AppBar(title: const Text('Card Organizer App')),
       body: Column(
+        mainAxisAlignment:
+            MainAxisAlignment.start, // Align all children to the start
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(labelText: 'Enter Name'),
-                  ),
-                ),
-                ElevatedButton(onPressed: _addRecord, child: const Text('Add')),
-              ],
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Enter Name'),
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _records.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_records[index]['name']),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () => _deleteRecord(_records[index]['_id']),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 70.0,
+              ), // Add vertical padding
+              child: SizedBox(
+                height: 100,
+                width: double.infinity,
+                child: Center(
+                  child: GridView.builder(
+                    itemCount: folders.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: 1,
+                      mainAxisSpacing: 8, // Space between rows
+                      crossAxisSpacing: 8, // Space between cols
+                    ),
+                    itemBuilder: (context, index) {
+                      return Container(
+                        height: 5,
+                        width: 5,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: accent1,
+                          ),
+                          onPressed: () {},
+                          child: Center(
+                            child: Text(
+                              folders[index],
+                              style: TextStyle(fontSize: 50, color: text),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ),
             ),
           ),
         ],
